@@ -7,7 +7,16 @@
 <p><%= article.content %></p>
 
 <hr />
-<form action="/articles/comments" method="POST">
+<h2>Comments</h2>
+<% article.comments.forEach(c => { %>
+    <div class="well">
+      <p><%=c.content%></p>  
+      <p><strong>-<%=c.name%></strong></p>
+    </div>
+<% }) %>
+<hr />
+<h4>Comment on this post</h4>
+<form action="/articles/:id/comments" method="POST">
   <div class="form-group">
     <label for="name">Name</label>
     <input type="text" class="form-control" name="name" required>
@@ -20,8 +29,6 @@
   <input type="hidden" name="articleId" value="<%=article.id%>")>
   <input type="submit" class="btn btn-primary" value="Post comment">
 </form>
+
 <hr />
-<% article.comments.forEach(c => { %>
-     <p><%=c.content%>  -<%=c.name%></p>
-<% }) %>
 <a href="/">&larr; Back Home</a>

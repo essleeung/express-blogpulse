@@ -18,7 +18,7 @@ router.post('/', function(req, res) {
 })
 
 // POST /articles/:id/comments - adds comments to articles
-router.post('/comments', function(req,res) {
+router.post('/:id/comments', function(req,res) {
   db.comment.create(req.body)
   .then(function(comment) {
     res.redirect(`/articles/${req.body.articleId}`)
@@ -49,6 +49,7 @@ router.get('/:id', function(req, res) {
   .then(function(article) {
     if (!article) throw Error()
     console.log(article.author)
+    console.log(article.comments)
     res.render('articles/show', { article: article })
   })
   .catch(function(error) {
