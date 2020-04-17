@@ -14,6 +14,8 @@
     "eslint": "^2.11.1"
   },
   "dependencies": {
+    "bootstrap-markdown-editor": "^2.2.4",
+    "bootstrap-markdown-editor-4": "^3.0.0",
     "ejs": "^2.4.2",
     "express": "^4.13.4",
     "express-ejs-layouts": "^2.1.0",
@@ -22,6 +24,7 @@
     "morgan": "^1.7.0",
     "pg": "^7.9.0",
     "rowdy-logger": "0.0.2",
-    "sequelize": "^5.3.5"
+    "sequelize": "^5.3.5",
+    "simplemde": "^1.11.2"
   }
 }
