@@ -5,15 +5,24 @@
 </p>
 
 <p><%= article.content %></p>
-
+<hr />
+<a class="btn btn-primary" href="/articles/<%= article.id %>/edit">Edit Article</a>
 <hr />
 <h2>Comments</h2>
-<% article.comments.forEach(c => { %>
+
+<% if (article.comments.length > 0) { %>
+  <% article.comments.forEach(c => { %>
     <div class="well">
-      <p><%=c.content%></p>  
+      <p><%=c.content%></p>
       <p><strong>-<%=c.name%></strong></p>
     </div>
-<% }) %>
+    <% }) %>
+<% } else { %>
+<p class="well">No comments yet.</p>
+<% } %>
+
+
+
 <hr />
 <h4>Comment on this post</h4>
 <form action="/articles/:id/comments" method="POST">
@@ -26,7 +35,7 @@
     <label for="content">Comment</label>
     <textarea type="text" class="form-control" name="content" required></textarea>
   </div>
-  <input type="hidden" name="articleId" value="<%=article.id%>")>
+  <input type="hidden" name="articleId" value="<%=article.id%>" )>
   <input type="submit" class="btn btn-primary" value="Post comment">
 </form>
 
