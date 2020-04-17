@@ -58,17 +58,20 @@ router.get('/:id', function (req, res) {
 
 //GET /articles/edit/:id - edit a specific article
 router.get('/:id/edit', function (req, res) {
-  db.article.findOne({
+  var authorPromise = db.author.findAll()
+  var articlePromise = db.article.findOne({
     where: { id: req.params.id },
     include: [db.author]
   })
-    .then(function (article) {
-      res.render('articles/edit', { id: req.params.id, article: article })
-    })
-    .catch(function (error) {
-      console.log(error)
-      res.status(400).render('main/404')
-    })
+
+  Promise.all([authorPromise, articlePromise])
+  .then(function(results) {
+    res.render('articles/edit', {id: req.params.id, authors: results[0], article: results[1] } )
+  })
+  .catch(function (error) {
+    console.log(error)
+    res.status(400).render('main/404')
+  })
 })
 
 //PUT /articles/:id - edit the article in db
