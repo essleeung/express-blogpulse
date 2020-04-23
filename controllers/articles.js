@@ -1,16 +1,48 @@
+var async = require('async')
 var express = require('express')
 var db = require('../models')
 var router = express.Router()
 
 // POST /articles - create a new post
 router.post('/', function (req, res) {
+  let tags = []
+  if (req.body.tags) {
+    tags = req.body.tags.split(',')
+  }
+  console.log(tags)
   db.article.create({
     title: req.body.title,
     content: req.body.content,
     authorId: req.body.authorId
   })
-    .then(function (post) {
-      res.redirect('/')
+    .then(function (article) {
+      if(tags.length) {
+        //TO DO: create tags and associations
+        //async.forEach(array, normal forEach function, function to run at the end)
+        async.forEach(tags,(t, done) => {
+          //this function gets called for every item in the tags array
+          //trim gets rid of white space
+          db.tag.findOrCreate({
+            where: {name: t.trim()}
+          })
+          .then(([tag, wasCreated]) => {
+            //tag was found or created successfully, now we need to add to the join table
+            //<model1>.add<model2>(model2 instance)
+            article.addTag(tag)
+            .then(() => {
+              //all done adding tag and relation in join table, call done to indicate
+              //that we are done with this iteration of the forEach
+              done()
+            })
+          })
+          
+        }, () => {
+          //this runs when everything has resolved, now we safely move on to the next page
+          res.redirect('/articles/' + article.id)
+        })
+      } else {
+        res.redirect('/articles/' + article.id)
+      }
     })
     .catch(function (error) {
       res.status(400).render('main/404')
@@ -44,7 +76,7 @@ router.get('/new', function (req, res) {
 router.get('/:id', function (req, res) {
   db.article.findOne({
     where: { id: req.params.id },
-    include: [db.author, db.comment]
+    include: [db.author, db.comment, db.tag]
   })
     .then(function (article) {
       if (!article) throw Error()

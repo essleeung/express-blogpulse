@@ -5,6 +5,12 @@
 </p>
 
 <p><%= article.content %></p>
+
+<strong>Tags:</strong>
+<% article.tags.forEach(t => { %>
+  <span class="badge"> <%=t.name%></span>
+<% }) %>
+
 <hr />
 <a class="btn btn-primary" href="/articles/<%= article.id %>/edit">Edit Article</a>
 <hr />
